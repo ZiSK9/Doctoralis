@@ -18,34 +18,43 @@ from cfd.models import login_cfd, ApplicationSettings
 from doyen.models import login_doyen
 
 
+# Noms 100 % fictifs (générés) — ne correspondent à aucune personne réelle.
 ENCADREURS = [
-    "Pr. BOUAMRANE Karim",
-    "Pr. BELALEM Ghalem",
-    "Pr. MERAD Boudia Mohammed",
-    "Pr. HADJILA Fethi",
-    "Pr. BENSLIMANE Sidi Mohammed",
+    "Pr. Adam Verel",
+    "Pr. Sonia Marlin",
+    "Pr. Karim Doltane",
+    "Pr. Lina Vasquez",
+    "Pr. Nadir Solane",
 ]
 
-# (nom, prenom, annee, titre, encadreur_idx, co_encadreur)
+CO_ENCADREURS = [
+    "Dr. Elias Norane",
+    "Dr. Maya Corvin",
+    "Dr. Ryan Belfort",
+    "Dr. Sarah Andell",
+    "Dr. Omar Valente",
+]
+
+# (nom, prenom, annee, titre, encadreur_idx, co_encadreur_idx | None)
 DOCTORANTS = [
-    ("BENALI", "Yacine", 1, "Détection d'anomalies dans les réseaux IoT par apprentissage profond", 0, "Dr. ZAHAF Amine"),
-    ("KHELIFI", "Amina", 1, "Systèmes de recommandation équitables pour le e-learning", 0, "Dr. SAÏDI Nadia"),
-    ("MEZIANE", "Sofiane", 2, "Ordonnancement énergétiquement efficace dans le cloud computing", 0, "Dr. LARBI Karim"),
-    ("BOUDJEMAA", "Lila", 2, "Traitement automatique de la langue arabe dialectale", 0, ""),
-    ("HAMDANI", "Rachid", 3, "Sécurité des contrats intelligents sur blockchain", 0, "Dr. TALEB Nassim"),
-    ("CHERIF", "Nawel", 1, "Vision par ordinateur pour l'imagerie médicale", 1, "Dr. OUALI Réda"),
-    ("SLIMANI", "Bilal", 2, "Optimisation métaheuristique du placement de VNF", 1, ""),
-    ("AZZOUZ", "Imene", 3, "Fédération de données pour la santé connectée", 1, "Dr. SAÏDI Nadia"),
-    ("DAHMANI", "Walid", 3, "Jumeaux numériques pour la maintenance prédictive", 1, "Dr. TALEB Nassim"),
-    ("REMILI", "Sara", 4, "Modèles génératifs pour la synthèse d'images satellites", 1, ""),
-    ("GHALEM", "Oussama", 1, "Micro-services résilients et observabilité", 2, "Dr. LARBI Karim"),
-    ("TADJER", "Meriem", 2, "Analyse de sentiments multimodale", 2, ""),
-    ("BENYAHIA", "Anis", 3, "Réseaux de neurones sur graphes pour la fraude bancaire", 2, "Dr. OUALI Réda"),
-    ("FERHAT", "Kenza", 4, "Apprentissage fédéré préservant la vie privée", 2, ""),
-    ("MOKRANE", "Riad", 2, "Edge computing pour les villes intelligentes", 3, "Dr. ZAHAF Amine"),
-    ("LOUNIS", "Dalila", 3, "Compression de modèles pour l'embarqué", 3, ""),
-    ("SAADI", "Hichem", 5, "Ontologies et web sémantique pour l'agriculture", 3, "Dr. TALEB Nassim"),
-    ("ZIANE", "Farida", 4, "Détection de deepfakes par analyse fréquentielle", 4, "Dr. SAÏDI Nadia"),
+    ("Talvi", "Noah", 1, "Détection d'anomalies dans les réseaux IoT par apprentissage profond", 0, 0),
+    ("Renou", "Elsa", 1, "Systèmes de recommandation équitables pour le e-learning", 0, 1),
+    ("Marven", "Adem", 2, "Ordonnancement énergétiquement efficace dans le cloud computing", 0, 2),
+    ("Solby", "Ines", 2, "Traitement automatique du langage naturel multilingue", 0, None),
+    ("Kadel", "Ryan", 3, "Sécurité des contrats intelligents sur blockchain", 0, 4),
+    ("Verane", "Lina", 1, "Vision par ordinateur pour l'imagerie médicale", 1, 3),
+    ("Doran", "Sami", 2, "Optimisation métaheuristique du placement de fonctions réseau", 1, None),
+    ("Feylan", "Nora", 3, "Fédération de données pour la santé connectée", 1, 1),
+    ("Berque", "Alan", 3, "Jumeaux numériques pour la maintenance prédictive", 1, 4),
+    ("Sarel", "Maya", 4, "Modèles génératifs pour la synthèse d'images satellites", 1, None),
+    ("Orfeo", "Yanis", 1, "Micro-services résilients et observabilité applicative", 2, 2),
+    ("Delin", "Sofia", 2, "Analyse de sentiments multimodale", 2, None),
+    ("Havel", "Idris", 3, "Réseaux de neurones sur graphes pour la détection de fraude", 2, 3),
+    ("Norval", "Kenza", 4, "Apprentissage fédéré préservant la vie privée", 2, None),
+    ("Loran", "Rida", 2, "Edge computing pour les villes intelligentes", 3, 0),
+    ("Ceylin", "Dana", 3, "Compression de modèles pour systèmes embarqués", 3, None),
+    ("Malvino", "Hedi", 5, "Ontologies et web sémantique pour l'agriculture de précision", 3, 4),
+    ("Reval", "Farah", 4, "Détection de deepfakes par analyse fréquentielle", 4, 1),
 ]
 
 YEAR_LABEL = {"2019/2020", "2020/2021", "2021/2022", "2022/2023", "2023/2024"}
@@ -79,9 +88,10 @@ class Command(BaseCommand):
         first_dates = ["2019/2020", "2020/2021", "2021/2022", "2022/2023", "2023/2024"]
         n_ins = n_rei = n_pv = n_sit = n_pass = n_sout = 0
 
-        for idx, (nom, prenom, annee, titre, enc_idx, co) in enumerate(DOCTORANTS, start=1):
+        for idx, (nom, prenom, annee, titre, enc_idx, co_idx) in enumerate(DOCTORANTS, start=1):
             num = f"2024-D-{idx:03d}"
             enc = encadreurs[enc_idx]
+            co = CO_ENCADREURS[co_idx] if co_idx is not None else ""
             user = User.objects.create_user(username=num, password="demo")
             doc = Doctorant.objects.create(
                 user=user, validation=True, annee=str(annee), encadreur=enc,
