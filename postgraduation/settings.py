@@ -38,7 +38,9 @@ CSRF_TRUSTED_ORIGINS = [o.strip() for o in os.environ.get('CSRF_TRUSTED_ORIGINS'
 CSRF_TRUSTED_ORIGINS += ['https://*.onrender.com']
 
 # Demo mode: allow portfolio visitors to browse every space without logging in.
-DEMO_MODE = os.environ.get('DEMO_MODE', 'False').lower() in ('1', 'true', 'yes')
+# Defaults to True so the deployed portfolio demo works out of the box; set the
+# env var DEMO_MODE=False to restore the normal authentication flow.
+DEMO_MODE = os.environ.get('DEMO_MODE', 'True').lower() in ('1', 'true', 'yes')
 
 # Behind Render's proxy, detect HTTPS correctly.
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

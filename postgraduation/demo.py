@@ -8,6 +8,15 @@ while the backend (real data, charts, workflows) stays fully dynamic.
 """
 from django.conf import settings
 from django.contrib.auth import login
+from django.shortcuts import redirect
+
+# In demo mode, login screens send visitors straight into the matching space.
+LOGIN_REDIRECTS = {
+    'loginDoctorant': 'point',
+    'loginEncadreur': 'listeDoctorans',
+    'loginCFD': 'dashboard',
+    'loginDoyen': 'dashboards',
+}
 
 # Doctorant pages that need request.user to be a doctorant
 DOCTORANT_URL_NAMES = {
@@ -57,6 +66,10 @@ class DemoAuthMiddleware:
         if match is None:
             return None
         name = match.url_name
+
+        # Skip the login screens entirely — go straight into the space.
+        if request.method == 'GET' and name in LOGIN_REDIRECTS:
+            return redirect(LOGIN_REDIRECTS[name])
 
         desired = None
         if name in DOCTORANT_URL_NAMES:
