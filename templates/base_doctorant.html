@@ -15,7 +15,7 @@
 <a class="side-link {% if request.resolver_match.url_name == 'point' %}active{% endif %}" href="{% url 'point' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>Mes points</a>
 
 <div style="margin-top:24px;padding-top:16px;border-top:1px solid var(--line)">
-  <a class="side-link" href="{% url 'index' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Déconnexion</a>
+  <a class="side-link" href="{% url 'logout' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Déconnexion</a>
 </div>
 {% endblock %}
 

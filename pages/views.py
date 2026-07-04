@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import reinscription,situation_doctorant,edition_pv,inscription,Passage
 from cfd.models import ApplicationSettings
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from pages.models import Doctorant
 from django.contrib.auth.models import User
@@ -18,6 +18,12 @@ from django.core.exceptions import ObjectDoesNotExist
 
 def index(request):
     return render(request,'index.html')
+
+
+def logout_view(request):
+    """Déconnexion : vide la session et ramène à l'accueil (fonctionne aussi en démo)."""
+    logout(request)
+    return redirect('index')
 
 def doctorantlogin(request):
     return render(request,'login.html')
