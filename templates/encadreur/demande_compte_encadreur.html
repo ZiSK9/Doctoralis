@@ -1,0 +1,40 @@
+{% extends 'base_auth.html' %}
+
+{% block title %}Doctoralis — Demande de compte Encadreur{% endblock %}
+{% block aside_style %}background:linear-gradient(150deg, #0f766e, #0891b2 55%, #10193f){% endblock %}
+{% block aside_badge %}Nouvel encadreur{% endblock %}
+{% block aside_title %}Encadrez sur<br>Doctoralis.{% endblock %}
+{% block aside_text %}Créez votre compte encadreur pour suivre vos doctorants. Votre demande sera validée par l'administration.{% endblock %}
+{% block aside_points %}
+  <li>✓&nbsp;&nbsp;Suivi centralisé de vos doctorants</li>
+  <li>✓&nbsp;&nbsp;Validation par le CFD</li>
+  <li>✓&nbsp;&nbsp;Gestion des soutenances</li>
+{% endblock %}
+
+{% block back_url %}{% url 'loginEncadreur' %}{% endblock %}
+{% block form_title %}Demander un compte{% endblock %}
+{% block form_lede %}Espace Encadreur — création de compte.{% endblock %}
+
+{% block form %}
+<form action="{% url 'demandeCompteEncadreur' %}" method="POST">
+  {% csrf_token %}
+  <div class="field">
+    <label for="username_encadreur">N° de carte professionnelle</label>
+    <input id="username_encadreur" type="text" name="username_encadreur" placeholder="Identifiant" required />
+  </div>
+  <div class="field">
+    <label for="nomPrenom_encadreur">Nom et prénom</label>
+    <input id="nomPrenom_encadreur" type="text" name="nomPrenom_encadreur" placeholder="Nom et prénom" required />
+  </div>
+  <div class="field">
+    <label for="password_encadreur">Mot de passe</label>
+    <input id="password_encadreur" type="password" name="password_encadreur" placeholder="Choisissez un mot de passe" required />
+  </div>
+  <button class="btn btn-primary btn-block" type="submit">
+    Créer mon compte
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </button>
+</form>
+{% endblock %}
+
+{% block form_footer %}Vous avez déjà un compte ? <a href="{% url 'loginEncadreur' %}" style="color:var(--brand-500);font-weight:600">Se connecter</a>{% endblock %}

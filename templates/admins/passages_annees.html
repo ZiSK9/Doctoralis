@@ -1,0 +1,51 @@
+{% extends 'base_cfd.html' %}
+
+{% block title %}Doctoralis — Passages d'année{% endblock %}
+{% block page_title %}Demandes de passage d'année{% endblock %}
+{% block page_sub %}Validez les passages à l'année suivante.{% endblock %}
+
+{% block content %}
+<div class="table-wrap">
+  <table class="data">
+    <thead>
+      <tr><th>Doctorant</th><th>Fichier</th><th>Année</th><th>État</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      {% for doctorant in doctorants %}
+        {% if doctorant.passage.exists %}
+        <tr>
+          <td>
+            <b>
+            {% for inscription in doctorant.inscription.all %}{{ inscription.prenom }} {{ inscription.nom }}{% endfor %}
+            {% for reinscription in doctorant.reinscription.all %}{{ reinscription.prenom }} {{ reinscription.nom }}{% endfor %}
+            </b>
+            <div style="color:var(--muted);font-size:.82rem">{{ doctorant.user }}</div>
+          </td>
+          <td>
+            {% for passage in doctorant.passage.all %}
+              {% if passage.fichier_reinscription_passage %}<a href="{{ passage.fichier_reinscription_passage.url }}" target="_blank" style="color:var(--brand-500)">Voir</a>{% else %}—{% endif %}
+            {% endfor %}
+          </td>
+          <td>{{ doctorant.annee }}</td>
+          <td>
+            {% for passage in doctorant.passage.all %}
+              {% if passage.passage_annee_validation %}<span class="badge badge-good">Validé</span>{% else %}<span class="badge badge-warn">En attente</span>{% endif %}
+            {% endfor %}
+          </td>
+          <td>
+            <form method="post" action="{% url 'demandesPassage' %}" style="display:flex;gap:8px">
+              {% csrf_token %}
+              <input type="hidden" name="doctorant_id" value="{{ doctorant.id }}">
+              <button class="btn btn-primary" style="padding:.45em 1em;font-size:.82rem" type="submit" name="action" value="accept">Accepter</button>
+              <button class="btn btn-ghost" style="padding:.45em 1em;font-size:.82rem" type="submit" name="action" value="reject">Refuser</button>
+            </form>
+          </td>
+        </tr>
+        {% endif %}
+      {% empty %}
+        <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:28px">Aucune demande de passage.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

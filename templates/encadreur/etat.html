@@ -1,0 +1,30 @@
+{% extends 'base_encadreur.html' %}
+
+{% block title %}Doctoralis — État d'avancement{% endblock %}
+{% block page_title %}État d'avancement{% endblock %}
+{% block page_sub %}Publications et communications déclarées par vos doctorants.{% endblock %}
+
+{% block content %}
+<div class="table-wrap">
+  <table class="data">
+    <thead>
+      <tr><th>Doctorant</th><th>Identifiant</th><th>Communications</th><th>Publications</th></tr>
+    </thead>
+    <tbody>
+      {% for etat in etats %}
+      <tr>
+        <td><b>
+          {% for inscription in etat.doctorant.inscription.all %}{{ inscription.prenom }} {{ inscription.nom }}{% endfor %}
+          {% for reinscription in etat.doctorant.reinscription.all %}{{ reinscription.prenom }} {{ reinscription.nom }}{% endfor %}
+        </b></td>
+        <td>{{ etat.doctorant.user.username }}</td>
+        <td>{% if etat.communication %}<a href="{{ etat.communication }}" target="_blank" style="color:var(--brand-500)">{{ etat.communication|truncatechars:40 }}</a>{% else %}—{% endif %}</td>
+        <td>{% if etat.publication %}<a href="{{ etat.publication }}" target="_blank" style="color:var(--brand-500)">{{ etat.publication|truncatechars:40 }}</a>{% else %}—{% endif %}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" style="text-align:center;color:var(--muted);padding:28px">Aucune déclaration pour le moment.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

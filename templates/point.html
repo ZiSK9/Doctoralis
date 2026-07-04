@@ -1,0 +1,48 @@
+{% extends 'base_doctorant.html' %}
+
+{% block title %}Doctoralis — Mes points{% endblock %}
+{% block page_title %}Mes points (PV){% endblock %}
+{% block page_sub %}Détail de votre évaluation et de votre score consolidé.{% endblock %}
+
+{% block content %}
+{% if editions %}
+<div class="table-wrap">
+  <table class="data">
+    <thead>
+      <tr>
+        <th>Doctorant</th>
+        <th>Cours de spécialité</th>
+        <th>Méthodologie</th>
+        <th>Anglais</th>
+        <th>Communications</th>
+        <th>Publications</th>
+        <th>TIC</th>
+        <th>Brevet</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for edition in editions %}
+      <tr>
+        <td><b>{{ edition.doctorant }}</b></td>
+        <td>{{ edition.cours_de_spécialité|default:"—" }}</td>
+        <td>{{ edition.methodologie|default:"—" }}</td>
+        <td>{{ edition.compétences_anglais|default:"—" }}</td>
+        <td>{{ edition.communications1|default:"0" }} / {{ edition.communications2|default:"0" }}</td>
+        <td>{{ edition.publication1|default:"0" }}, {{ edition.publication2|default:"0" }}, {{ edition.publication3|default:"0" }}, {{ edition.publication4|default:"0" }}, {{ edition.publication5|default:"0" }}</td>
+        <td>{{ edition.tic|default:"—" }}</td>
+        <td>{{ edition.brevet|default:"—" }}</td>
+        <td><span class="badge badge-brand" style="font-size:.92rem">{{ edition.total|default:"0" }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="panel" style="text-align:center;padding:56px 24px;max-width:560px;margin:0 auto">
+  <div style="font-size:2.4rem">📊</div>
+  <h3 style="margin-top:12px">Aucune évaluation disponible</h3>
+  <p style="color:var(--ink-2);margin:0">Vos points apparaîtront ici dès que le CFD aura édité votre PV.</p>
+</div>
+{% endif %}
+{% endblock %}

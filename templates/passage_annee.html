@@ -1,0 +1,17 @@
+{% extends 'base_doctorant.html' %}
+
+{% block title %}Doctoralis — Passage d'année{% endblock %}
+{% block page_title %}Passage d'année{% endblock %}
+{% block page_sub %}Déposez votre demande de passage à l'année suivante.{% endblock %}
+
+{% block content %}
+<div class="panel" style="max-width:640px">
+  <div class="panel-head"><h3>Demande de passage d'année</h3></div>
+  <div class="alert alert-info" style="margin-bottom:18px"><span>Joignez votre fichier de réinscription. Votre demande sera examinée par l'administration.</span></div>
+  <form method="POST" action="{% url 'passage_annee' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="field"><label>Fichier de réinscription (PDF)</label><input type="file" name="fichier_reinscription_passage" required></div>
+    <button class="btn btn-primary" type="submit" style="margin-top:8px">Envoyer ma demande</button>
+  </form>
+</div>
+{% endblock %}

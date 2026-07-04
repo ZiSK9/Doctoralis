@@ -1,0 +1,73 @@
+{% extends 'base_cfd.html' %}
+
+{% block title %}Doctoralis — Soutenances{% endblock %}
+{% block page_title %}Soutenances{% endblock %}
+{% block page_sub %}Traitez les dossiers et déposez les pièces de soutenance.{% endblock %}
+
+{% block content %}
+<div class="panel" style="margin-bottom:22px;max-width:640px">
+  <div class="panel-head"><h3>Traiter une demande</h3></div>
+  <form action="{% url 'demandesSoutenances' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="field">
+      <label for="doctorant">Doctorant</label>
+      <select id="doctorant" name="doctorant" required>
+        <option value="" selected disabled>Sélectionnez un doctorant</option>
+        {% for doctorant in doctorants %}
+          {% if doctorant.inscription.all %}
+            {% for inscription in doctorant.inscription.all %}<option value="{{ doctorant.id }}">{{ inscription.prenom }} {{ inscription.nom }}</option>{% endfor %}
+          {% elif doctorant.reinscription.all %}
+            {% for reinscription in doctorant.reinscription.all %}<option value="{{ doctorant.id }}">{{ reinscription.prenom }} {{ reinscription.nom }}</option>{% endfor %}
+          {% else %}
+            <option value="{{ doctorant.id }}">{{ doctorant.user.username }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="action">Décision</label>
+      <select id="action" name="action" required>
+        <option value="" selected disabled>-- Choisir --</option>
+        <option value="accept">Accepter</option>
+        <option value="reject">Refuser</option>
+      </select>
+    </div>
+    <div class="field"><label>PV CSD/CSF (PDF)</label><input type="file" name="csd_csf"></div>
+    <div class="field"><label>Autorisation de soutenance (PDF)</label><input type="file" name="autorisation_soutenance"></div>
+    <div class="field"><label>PV de soutenance (PDF)</label><input type="file" name="pv_soutenance"></div>
+    <button class="btn btn-primary" type="submit" style="margin-top:8px">Enregistrer</button>
+  </form>
+</div>
+
+<div class="table-wrap">
+  <table class="data">
+    <thead>
+      <tr><th>Doctorant</th><th>Encadreur</th><th>État</th><th>PV CSD/CSF</th><th>Autorisation</th><th>PV de soutenance</th></tr>
+    </thead>
+    <tbody>
+      {% for doctorant in doctorants %}
+        {% if doctorant.soutenance.exists %}
+          {% for soutenance in doctorant.soutenance.all %}
+          <tr>
+            <td>
+              <b>
+              {% for inscription in doctorant.inscription.all %}{{ inscription.prenom }} {{ inscription.nom }}{% endfor %}
+              {% for reinscription in doctorant.reinscription.all %}{{ reinscription.prenom }} {{ reinscription.nom }}{% endfor %}
+              </b>
+              <div style="color:var(--muted);font-size:.82rem">{{ doctorant.user.username }}</div>
+            </td>
+            <td>{{ doctorant.encadreur.nom_prenom|default:"—" }}</td>
+            <td>{% if soutenance.action %}<span class="badge badge-good">Autorisée</span>{% else %}<span class="badge badge-warn">En attente</span>{% endif %}</td>
+            <td>{% if soutenance.csd_csf %}<a href="{{ soutenance.csd_csf.url }}" target="_blank" style="color:var(--brand-500)">Voir</a>{% else %}—{% endif %}</td>
+            <td>{% if soutenance.autorisation_soutenance %}<a href="{{ soutenance.autorisation_soutenance.url }}" target="_blank" style="color:var(--brand-500)">Voir</a>{% else %}—{% endif %}</td>
+            <td>{% if soutenance.pv_soutenance %}<a href="{{ soutenance.pv_soutenance.url }}" target="_blank" style="color:var(--brand-500)">Voir</a>{% else %}—{% endif %}</td>
+          </tr>
+          {% endfor %}
+        {% endif %}
+      {% empty %}
+        <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:28px">Aucune soutenance.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'base_doyen.html' %}
+
+{% block title %}Doctoralis — Tableau de bord Vice-Doyen{% endblock %}
+{% block page_title %}Tableau de bord{% endblock %}
+{% block page_sub %}Espace Vice-Doyen · Vue stratégique de la formation doctorale{% endblock %}
+
+{% block extra_head %}<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>{% endblock %}
+
+{% block content %}
+<section class="kpis">
+  <div class="kpi">
+    <div class="k-ico" style="background:color-mix(in srgb,var(--series-1) 14%,transparent);color:var(--series-1)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+    <div class="k-lbl">Doctorants suivis</div><div class="k-val">{{ total }}</div>
+    <div class="k-trend" style="color:var(--good)">{{ valides }} validés</div>
+  </div>
+  <div class="kpi">
+    <div class="k-ico" style="background:color-mix(in srgb,var(--accent-teal) 16%,transparent);color:var(--accent-teal)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h20v14H2zM8 21h8M7 8l3 3 5-5"/></svg></div>
+    <div class="k-lbl">Encadreurs</div><div class="k-val">{{ nb_encadreurs }}</div>
+    <div class="k-trend" style="color:var(--muted)">actifs</div>
+  </div>
+  <div class="kpi">
+    <div class="k-ico" style="background:color-mix(in srgb,var(--series-4) 16%,transparent);color:var(--series-4)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/></svg></div>
+    <div class="k-lbl">Soutenances</div><div class="k-val">{{ nb_soutenances }}</div>
+    <div class="k-trend" style="color:var(--good)">{{ soutenances_validees }} autorisées</div>
+  </div>
+  <div class="kpi">
+    <div class="k-ico" style="background:color-mix(in srgb,var(--series-2) 16%,transparent);color:var(--series-2)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg></div>
+    <div class="k-lbl">PV édités</div><div class="k-val">{{ nb_pv }}</div>
+    <div class="k-trend" style="color:var(--muted)">évaluations</div>
+  </div>
+</section>
+
+<section class="panels">
+  <div class="panel">
+    <div class="panel-head"><h3>Entonnoir du parcours doctoral</h3><span class="meta">Inscription → Soutenance</span></div>
+    <div style="height:300px"><canvas id="funnelChart"></canvas></div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>Répartition par année</h3><span class="meta">Année de thèse</span></div>
+    <div style="height:230px"><canvas id="yearChart"></canvas></div>
+    <div class="legend" id="yearLegend" style="margin-top:16px;justify-content:center"></div>
+  </div>
+</section>
+
+<div class="grid-4" style="margin-top:22px">
+  <a class="card role-card" style="--rc:#2a78d6" href="{% url 'liste_inscription_doyen' %}"><div class="ico r-ico"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg></div><h3 style="font-size:1.05rem">Inscriptions</h3><p>Consulter les dossiers d'inscription.</p></a>
+  <a class="card role-card" style="--rc:#1baf7a" href="{% url 'etat_avencement_doyen' %}"><div class="ico r-ico"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><h3 style="font-size:1.05rem">Situation</h3><p>Suivre l'avancement des doctorants.</p></a>
+  <a class="card role-card" style="--rc:#4a3aa7" href="{% url 'editionPVdoyen' %}"><div class="ico r-ico"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg></div><h3 style="font-size:1.05rem">Évaluations</h3><p>Voir les PV et les scores.</p></a>
+  <a class="card role-card" style="--rc:#eda100" href="{% url 'soutenanceDoyen' %}"><div class="ico r-ico"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 15 3.5 2-1-4 3-2.5-4-.3L12 6l-1.5 4-4 .3 3 2.5-1 4Z"/></svg></div><h3 style="font-size:1.05rem">Soutenances</h3><p>Suivre les soutenances.</p></a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script id="dx-data" type="application/json">
+{"funnelLabels": {{ funnel_labels|safe }}, "funnelValues": {{ funnel_values|safe }}, "yearLabels": {{ year_labels|safe }}, "yearValues": {{ year_values|safe }}}
+</script>
+<script>
+  var D = JSON.parse(document.getElementById('dx-data').textContent), charts = [];
+  function css(v) { return getComputedStyle(document.body).getPropertyValue(v).trim(); }
+  function build() {
+    charts.forEach(function (c) { c.destroy(); }); charts = [];
+    var ink = css('--ink'), grid = css('--line');
+    var cat = [css('--series-1'), css('--series-2'), css('--series-4'), css('--series-3'), css('--series-5')];
+    Chart.defaults.font.family = 'Inter, system-ui, sans-serif'; Chart.defaults.color = css('--muted');
+    charts.push(new Chart(document.getElementById('funnelChart'), {
+      type: 'bar', data: { labels: D.funnelLabels, datasets: [{ data: D.funnelValues, backgroundColor: css('--series-3'), borderRadius: 6, barThickness: 30 }] },
+      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, grid: { color: grid }, ticks: { precision: 0 } }, y: { grid: { display: false }, ticks: { color: ink, font: { weight: 600 } } } } }
+    }));
+    charts.push(new Chart(document.getElementById('yearChart'), {
+      type: 'doughnut', data: { labels: D.yearLabels, datasets: [{ data: D.yearValues, backgroundColor: cat, borderColor: css('--surface'), borderWidth: 3, hoverOffset: 6 }] },
+      options: { responsive: true, maintainAspectRatio: false, cutout: '62%', plugins: { legend: { display: false } } }
+    }));
+    var lg = document.getElementById('yearLegend'); lg.innerHTML = '';
+    D.yearLabels.forEach(function (l, i) { lg.innerHTML += '<span><span class="dot" style="background:' + cat[i] + '"></span>' + l + ' · <b style="color:var(--ink)">' + D.yearValues[i] + '</b></span>'; });
+  }
+  build();
+  document.addEventListener('dx-theme-change', function () { setTimeout(build, 60); });
+</script>
+{% endblock %}

@@ -1,0 +1,152 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>login Post-Graduation</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="keywords" content="" />
+	<link href="{% static 'css/bootstrap.css'%}" rel="stylesheet" type="text/css" media="all" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link href="{% static 'css/style.css'%}" rel="stylesheet" type="text/css" media="all" />
+	<link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
+	<link href="http://fonts.googleapis.com/css?family=Raleway:300,400,500,600,800" rel="stylesheet">
+</head>
+<style>/* CSS for Mise à jour de ma situation section */
+	
+	</style>
+<body>
+
+	<body>
+		<div class="header" id="home">
+			<div class="top">
+				<div class="container">
+					<div class="col-md-9 top-left">
+						<ul>
+							<li>
+								<i class="fa fa-envelope-o" aria-hidden="true"></i>
+								<a href="mailto:Mail@univ-oran.dz">Mail@univ-oran.dz</a>
+							</li>
+							<li>
+								<i class="fa fa-envelope-o" aria-hidden="true"></i>
+								<a href="mailto:Mail@univ-oran1.dz">Mail@univ-oran1.dz</a>
+							</li>
+							<li>
+								<i class="fa fa-envelope-o" aria-hidden="true"></i>
+								<a href="mailto:Mail@doctorant">Mail@doctorant</a>
+							</li>
+						</ul>
+					</div>
+					
+				</div>
+			</div>
+			<div class="top-bar">
+				<div class="container">
+					<nav class="navbar navbar-default">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+							<a href="{% url 'index' %}">
+								<img src="{% static 'images/logo.jpg'%}" height="65" />
+							</a>
+						</div>
+						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+							
+							<ul class="nav navbar-nav navbar-right">
+								
+								<li>
+									<a href="{% url 'point' %}">Mes points</a>
+								</li>
+								<li>
+									<a href="{% url 'etat_d`avencement' %}" style="text-transform: none;">Mise à jour de mon situation</a>
+								</li>
+								
+								<li>
+									<a href="{% url 'index' %}">Déconnecter</a>
+								</li>
+							</ul>
+						</div>
+						<div class="clearfix"> </div>
+					</nav>
+				</div>
+			</div>
+			<div class="banner">
+			</div>
+		</div>
+		<section class="contact">
+			<div class="container">
+				<h3 class="title-txt">
+				  <span>C</span>contact Us
+				</h3>
+				<div class="contact-grids">
+				  <div class="col-md-12 contact-form">
+					<h4 class="heading" style="text-transform: none;"  > Mon situation</h4>
+					{% if messages %}
+					  <div class="alert alert-success">
+						{% for message in messages %}
+						  {{ message }}
+						{% endfor %}
+					  </div>
+					{% endif %}
+					<form method="POST" action="{% url 'demandePoint' %}">
+					  {% csrf_token %}
+					  <label>Numero inscription</label>
+					  <input id="sujet" name="numero_inscription" type="text" placeholder="entrez votre numéro inscription" required="" />
+					  <div class="submit1" align="center">
+						<br>
+						<button type="submit" class="btn btn1">Afficher</button>
+					  </div>
+					</form>
+				  </div>
+				</div>
+			  </div>
+			  
+			  
+		</section>
+		<div class="footer">
+			<div class="container">
+				<div class="f-bg-l">
+					<div class="col-md-4 footer_grid">
+						<h3>FACULTÉS</h3>
+						<ul>
+							<li>Faculté des sciences exactes et appliquées</li>
+							<li>Faculté des sciences de la nature et de la vie</li>
+							<li>Faculté de médecine</li>
+							<li>Faculté des lettres,des arts</li>
+							<li>Faculté des sciences humaines et de la civilisation islamique</li>
+							<li>Institut des Sciences et Techniques Appliquées (ISTA)</li>
+						</ul>
+					</div>
+					<div class="col-md-4 footer_grid hpft">
+						<h3>Contact Us</h3>
+						<ul class="con_inner_text">
+							<li>
+								<span class="fa fa-map-marker" aria-hidden="true"></span>Lorem ipsum dolor sit amet</li>
+							<li>
+								<span class="fa fa-envelope-o" aria-hidden="true"></span>
+								<a href="mailto:info@example.com">info@univ1.com</a>
+							</li>
+							<li>
+								<span class="fa fa-phone" aria-hidden="true"></span> +21367548475</li>
+						</ul>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		
+		<script type="text/javascript" src="{% static 'js/jquery-2.2.3.min.js'%}"></script>
+		<script src="{% static 'js/main.js'%}"></script>
+		<script type="text/javascript" src="{% static 'js/easing.js'%}"></script>
+		<a href="#home" id="toTop" style="display: block;">
+			<span id="toTopHover" style="opacity: 1;"> </span>
+		</a>
+		<script type="text/javascript" src="{% static 'js/bootstrap.js'%}"></script>
+	</body>
+
+</html>

@@ -1,0 +1,34 @@
+{% extends 'base_auth.html' %}
+
+{% block title %}Doctoralis — Responsable CFD{% endblock %}
+{% block aside_style %}background:linear-gradient(150deg, #4a34d6, #6d5efc 55%, #0e7490){% endblock %}
+{% block aside_badge %}Responsable CFD{% endblock %}
+{% block aside_title %}Orchestrez la formation<br>doctorale de A à Z.{% endblock %}
+{% block aside_text %}Validez les comptes, éditez les PV, gérez les campagnes d'inscription et suivez chaque parcours en temps réel.{% endblock %}
+{% block aside_points %}
+  <li>✓&nbsp;&nbsp;Tableau de bord analytique complet</li>
+  <li>✓&nbsp;&nbsp;Validation des comptes et des passages</li>
+  <li>✓&nbsp;&nbsp;Édition des PV et affectation des encadreurs</li>
+{% endblock %}
+
+{% block form_title %}Responsable CFD{% endblock %}
+{% block form_lede %}Comité de Formation Doctorale.{% endblock %}
+{% block demo_url %}{% url 'dashboard' %}{% endblock %}
+
+{% block form %}
+<form action="{% url 'indexCFD' %}" method="POST">
+  {% csrf_token %}
+  <div class="field">
+    <label for="username_cfd">Nom d'utilisateur</label>
+    <input id="username_cfd" type="text" name="username_cfd" placeholder="Identifiant" required />
+  </div>
+  <div class="field">
+    <label for="password_cfd">Mot de passe</label>
+    <input id="password_cfd" type="password" name="password_cfd" placeholder="••••••••" required />
+  </div>
+  <button class="btn btn-primary btn-block" type="submit">
+    Se connecter
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </button>
+</form>
+{% endblock %}

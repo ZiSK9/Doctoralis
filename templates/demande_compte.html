@@ -1,0 +1,48 @@
+{% extends 'base_auth.html' %}
+
+{% block title %}Doctoralis — Demande de compte{% endblock %}
+{% block aside_badge %}Nouveau doctorant{% endblock %}
+{% block aside_title %}Rejoignez<br>la plateforme.{% endblock %}
+{% block aside_text %}Créez votre compte doctorant pour démarrer le suivi de votre parcours. Votre demande sera validée par l'administration.{% endblock %}
+{% block aside_points %}
+  <li>✓&nbsp;&nbsp;Un dossier centralisé et sécurisé</li>
+  <li>✓&nbsp;&nbsp;Validation rapide par le CFD</li>
+  <li>✓&nbsp;&nbsp;Accès à tout votre parcours</li>
+{% endblock %}
+
+{% block back_url %}{% url 'loginDoctorant' %}{% endblock %}
+{% block form_title %}Demander un compte{% endblock %}
+{% block form_lede %}Espace Doctorant — création de compte.{% endblock %}
+
+{% block form %}
+<form action="{% url 'demandeCompte' %}" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="field">
+    <label for="numero_inscription">N° d'inscription</label>
+    <input id="numero_inscription" type="text" name="numero_inscription" placeholder="Ex : 2024-D-0142" required />
+  </div>
+  <div class="field">
+    <label for="password">Mot de passe</label>
+    <input id="password" type="password" name="password" placeholder="Choisissez un mot de passe" required />
+  </div>
+  <div class="field">
+    <label for="select_annee">Année de thèse</label>
+    <select id="select_annee" name="select_annee" required>
+      <option value="" selected disabled>-- Sélectionnez --</option>
+      <option value="1">1re année</option>
+      <option value="2">2e année</option>
+      <option value="3">3e année</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="fichier_inscription">Fichier d'inscription (PDF)</label>
+    <input id="fichier_inscription" type="file" name="fichier_inscription" required />
+  </div>
+  <button class="btn btn-primary btn-block" type="submit">
+    Créer mon compte
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </button>
+</form>
+{% endblock %}
+
+{% block form_footer %}Vous avez déjà un compte ? <a href="{% url 'loginDoctorant' %}" style="color:var(--brand-500);font-weight:600">Se connecter</a>{% endblock %}

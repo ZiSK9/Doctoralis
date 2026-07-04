@@ -1,0 +1,41 @@
+{% extends 'base_encadreur.html' %}
+
+{% block title %}Doctoralis — Situation & points{% endblock %}
+{% block page_title %}Situation & points{% endblock %}
+{% block page_sub %}Évaluation (PV) de vos doctorants.{% endblock %}
+
+{% block content %}
+<div class="table-wrap">
+  <table class="data">
+    <thead>
+      <tr>
+        <th>Doctorant</th><th>Cours de spécialité</th><th>Méthodologie</th><th>Anglais</th>
+        <th>Communications</th><th>Publications</th><th>TIC</th><th>Brevet</th><th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for edition in editions %}
+      <tr>
+        <td>
+          <b>
+          {% for inscription in edition.doctorant.inscription.all %}{{ inscription.prenom }} {{ inscription.nom }}{% endfor %}
+          {% for reinscription in edition.doctorant.reinscription.all %}{{ reinscription.prenom }} {{ reinscription.nom }}{% endfor %}
+          </b>
+          <div style="color:var(--muted);font-size:.82rem">{{ edition.doctorant.user.username }}</div>
+        </td>
+        <td>{{ edition.cours_de_spécialité|default:"—" }}</td>
+        <td>{{ edition.methodologie|default:"—" }}</td>
+        <td>{{ edition.compétences_anglais|default:"—" }}</td>
+        <td>{{ edition.communications1|default:"0" }} / {{ edition.communications2|default:"0" }}</td>
+        <td>{{ edition.publication1|default:"0" }}, {{ edition.publication2|default:"0" }}, {{ edition.publication3|default:"0" }}, {{ edition.publication4|default:"0" }}, {{ edition.publication5|default:"0" }}</td>
+        <td>{{ edition.tic|default:"—" }}</td>
+        <td>{{ edition.brevet|default:"—" }}</td>
+        <td><span class="badge badge-brand" style="font-size:.92rem">{{ edition.total|default:"0" }}</span></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="9" style="text-align:center;color:var(--muted);padding:28px">Aucune évaluation disponible.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base_app.html' %}
+{% load static %}
+
+{% block sidebar %}
+<a href="{% url 'dashboards' %}" class="brand" style="padding:6px 8px 22px">
+  <span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/></svg></span>
+  Doctoralis
+</a>
+
+<div class="side-group">Vice-Doyen</div>
+<a class="side-link {% if request.resolver_match.url_name == 'dashboards' %}active{% endif %}" href="{% url 'dashboards' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>Tableau de bord</a>
+
+<div class="side-group">Dossiers</div>
+<a class="side-link {% if request.resolver_match.url_name == 'liste_inscription_doyen' %}active{% endif %}" href="{% url 'liste_inscription_doyen' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>Inscriptions</a>
+<a class="side-link {% if request.resolver_match.url_name == 'liste_reinscription_doyen' %}active{% endif %}" href="{% url 'liste_reinscription_doyen' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Réinscriptions</a>
+<a class="side-link {% if request.resolver_match.url_name == 'etat_avencement_doyen' %}active{% endif %}" href="{% url 'etat_avencement_doyen' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Situation doctorants</a>
+
+<div class="side-group">Évaluation</div>
+<a class="side-link {% if request.resolver_match.url_name == 'editionPVdoyen' %}active{% endif %}" href="{% url 'editionPVdoyen' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>Édition de PV</a>
+<a class="side-link {% if request.resolver_match.url_name == 'soutenanceDoyen' %}active{% endif %}" href="{% url 'soutenanceDoyen' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 15 3.5 2-1-4 3-2.5-4-.3L12 6l-1.5 4-4 .3 3 2.5-1 4Z"/></svg>Soutenances</a>
+
+<div style="margin-top:24px;padding-top:16px;border-top:1px solid var(--line)">
+  <a class="side-link" href="{% url 'loginDoyen' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Déconnexion</a>
+</div>
+{% endblock %}
+
+{% block topbar_extra %}<span class="badge badge-brand" style="background:color-mix(in srgb,var(--series-3) 16%,transparent);color:color-mix(in srgb,var(--series-3) 80%,var(--ink))"><span class="dot" style="background:var(--series-3)"></span>Vice-Doyen</span>{% endblock %}

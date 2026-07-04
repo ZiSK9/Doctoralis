@@ -1,0 +1,39 @@
+{% extends 'base_doyen.html' %}
+
+{% block title %}Doctoralis — Soutenances{% endblock %}
+{% block page_title %}Soutenances{% endblock %}
+{% block page_sub %}Suivi des dossiers de soutenance.{% endblock %}
+
+{% block content %}
+<div class="table-wrap">
+  <table class="data">
+    <thead>
+      <tr><th>Doctorant</th><th>Encadreur</th><th>État</th><th>PV CSD/CSF</th><th>Autorisation</th><th>PV de soutenance</th></tr>
+    </thead>
+    <tbody>
+      {% for doctorant in doctorants %}
+        {% if doctorant.soutenance.exists %}
+          {% for soutenance in doctorant.soutenance.all %}
+          <tr>
+            <td>
+              <b>
+              {% for inscription in doctorant.inscription.all %}{{ inscription.prenom }} {{ inscription.nom }}{% endfor %}
+              {% for reinscription in doctorant.reinscription.all %}{{ reinscription.prenom }} {{ reinscription.nom }}{% endfor %}
+              </b>
+              <div style="color:var(--muted);font-size:.82rem">{{ doctorant.user.username }}</div>
+            </td>
+            <td>{{ doctorant.encadreur.nom_prenom|default:"—" }}</td>
+            <td>{% if soutenance.action %}<span class="badge badge-good">Autorisée</span>{% else %}<span class="badge badge-warn">En attente</span>{% endif %}</td>
+            <td>{% if soutenance.csd_csf %}<a href="{{ soutenance.csd_csf.url }}" target="_blank" style="color:var(--brand-500)">Voir</a>{% else %}—{% endif %}</td>
+            <td>{% if soutenance.autorisation_soutenance %}<a href="{{ soutenance.autorisation_soutenance.url }}" target="_blank" style="color:var(--brand-500)">Voir</a>{% else %}—{% endif %}</td>
+            <td>{% if soutenance.pv_soutenance %}<a href="{{ soutenance.pv_soutenance.url }}" target="_blank" style="color:var(--brand-500)">Voir</a>{% else %}—{% endif %}</td>
+          </tr>
+          {% endfor %}
+        {% endif %}
+      {% empty %}
+        <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:28px">Aucune soutenance.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

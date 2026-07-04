@@ -1,0 +1,72 @@
+def edition_PV(request):
+    entries = edition_pv.objects.all()
+    if request.method == 'POST':
+        numero_inscription = request.POST.get('numero_inscription')
+        nom_prenom = request.POST.get('nom_prenom')
+        cours_de_specialite = request.POST.get('cours_de_specialite')
+        methodologie = request.POST.get('methodologie')
+        competences_anglais = request.POST.get('competences_anglais')
+        communications = request.POST.get('communications')
+        publications = request.POST.get('publications')
+        tic = request.POST.get('tic')
+
+        try:
+            pv_entry = edition_pv.objects.get(doctorant=numero_inscription)
+            pv_entry.nom_prenom = nom_prenom
+            
+            if int(cours_de_specialite) > 12:
+                # If cours_de_specialite exceeds 12, display an error message
+                messages.error(request, '')
+            else:
+                pv_entry.cours_de_spécialité = cours_de_specialite
+            
+            if int(methodologie) > 6:
+                # If methodologie exceeds 6, display an error message
+                messages.error(request, '')
+            else:
+                pv_entry.methodologie = methodologie
+            
+            if int(competences_anglais) > 6:
+                # If compétences_anglais exceeds 6, display an error message
+                messages.error(request, '')
+            else:
+                pv_entry.compétences_anglais = competences_anglais
+            
+            pv_entry.communications = communications
+            pv_entry.publications = publications
+            pv_entry.tic = tic
+        except ObjectDoesNotExist:
+            if int(cours_de_specialite) > 12:
+                # If cours_de_specialite exceeds 12, display an error message
+                messages.error(request, 'Cours de spécialité should not exceed 12.')
+                return redirect('editionPV')  # Redirect back to the form page
+            
+            if int(methodologie) > 6:
+                # If methodologie exceeds 6, display an error message
+                messages.error(request, 'Méthodologie should not exceed 6.')
+                return redirect('editionPV')  # Redirect back to the form page
+            
+            if int(competences_anglais) > 6:
+                # If compétences_anglais exceeds 6, display an error message
+                messages.error(request, 'Compétences en anglais should not exceed 6.')
+                return redirect('editionPV')  # Redirect back to the form page
+            doctorant = Doctorant.objects.get(numero_inscription=numero_inscription)
+            pv_entry = edition_pv.objects.create(
+                doctorant=doctorant,
+                nom_prenom=nom_prenom,
+                cours_de_spécialité=cours_de_specialite,
+                methodologie=methodologie,
+                compétences_anglais=competences_anglais,
+                communications=communications,
+                publications=publications,
+                tic=tic
+            )
+
+        pv_entry.calculate_total()
+        pv_entry.save()
+
+        return redirect('editionPV')  # Replace 'success_url' with the URL or name of your success page
+    context = {
+        'entries': entries
+    }
+    return render(request, 'admins/editionpv.html', context)

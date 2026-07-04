@@ -1,0 +1,21 @@
+{% extends 'base_app.html' %}
+{% load static %}
+
+{% block sidebar %}
+<a href="{% url 'index' %}" class="brand" style="padding:6px 8px 22px">
+  <span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/></svg></span>
+  Doctoralis
+</a>
+
+<div class="side-group">Encadreur</div>
+<a class="side-link {% if request.resolver_match.url_name == 'listeDoctorans' %}active{% endif %}" href="{% url 'listeDoctorans' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>Mes doctorants</a>
+<a class="side-link {% if request.resolver_match.url_name == 'situations' %}active{% endif %}" href="{% url 'situations' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>Situation & points</a>
+<a class="side-link {% if request.resolver_match.url_name == 'etat' %}active{% endif %}" href="{% url 'etat' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>État d'avancement</a>
+<a class="side-link {% if request.resolver_match.url_name == 'demandeSoutenance' %}active{% endif %}" href="{% url 'demandeSoutenance' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 15 3.5 2-1-4 3-2.5-4-.3L12 6l-1.5 4-4 .3 3 2.5-1 4Z"/></svg>Demander une soutenance</a>
+
+<div style="margin-top:24px;padding-top:16px;border-top:1px solid var(--line)">
+  <a class="side-link" href="{% url 'index' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Déconnexion</a>
+</div>
+{% endblock %}
+
+{% block topbar_extra %}<span class="badge badge-brand" style="background:color-mix(in srgb,var(--accent-teal) 16%,transparent);color:color-mix(in srgb,var(--accent-teal) 70%,var(--ink))"><span class="dot" style="background:var(--accent-teal)"></span>Encadreur</span>{% endblock %}

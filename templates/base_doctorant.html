@@ -1,0 +1,22 @@
+{% extends 'base_app.html' %}
+{% load static %}
+
+{% block sidebar %}
+<a href="{% url 'index' %}" class="brand" style="padding:6px 8px 22px">
+  <span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/></svg></span>
+  Doctoralis
+</a>
+
+<div class="side-group">Mon parcours</div>
+<a class="side-link {% if request.resolver_match.url_name == 'inscription' %}active{% endif %}" href="{% url 'inscription' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M9 15l2 2 4-4"/></svg>Inscription</a>
+<a class="side-link {% if request.resolver_match.url_name == 'reinscription' %}active{% endif %}" href="{% url 'reinscription' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Réinscription</a>
+<a class="side-link {% if request.resolver_match.url_name == 'passage_annee' %}active{% endif %}" href="{% url 'passage_annee' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Passage d'année</a>
+<a class="side-link {% if request.resolver_match.url_name == 'etat_d`avencement' %}active{% endif %}" href="{% url 'etat_d`avencement' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>État d'avancement</a>
+<a class="side-link {% if request.resolver_match.url_name == 'point' %}active{% endif %}" href="{% url 'point' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>Mes points</a>
+
+<div style="margin-top:24px;padding-top:16px;border-top:1px solid var(--line)">
+  <a class="side-link" href="{% url 'index' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Déconnexion</a>
+</div>
+{% endblock %}
+
+{% block topbar_extra %}<span class="badge badge-brand"><span class="dot" style="background:var(--brand-500)"></span>Espace Doctorant</span>{% endblock %}

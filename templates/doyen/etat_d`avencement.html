@@ -1,0 +1,27 @@
+{% extends 'base_doyen.html' %}
+
+{% block title %}Doctoralis — Situation doctorants{% endblock %}
+{% block page_title %}Situation des doctorants{% endblock %}
+{% block page_sub %}Communications et publications déclarées.{% endblock %}
+
+{% block content %}
+<div class="table-wrap">
+  <table class="data">
+    <thead><tr><th>Doctorant</th><th>Communications</th><th>Publications</th></tr></thead>
+    <tbody>
+      {% for situation in situations %}
+      <tr>
+        <td><b>
+          {% for inscription in situation.doctorant.inscription.all %}{{ inscription.prenom }} {{ inscription.nom }}{% endfor %}
+          {% for reinscription in situation.doctorant.reinscription.all %}{{ reinscription.prenom }} {{ reinscription.nom }}{% endfor %}
+        </b></td>
+        <td>{% if situation.communication %}<a href="{{ situation.communication }}" target="_blank" style="color:var(--brand-500)">{{ situation.communication|truncatechars:40 }}</a>{% else %}—{% endif %}</td>
+        <td>{% if situation.publication %}<a href="{{ situation.publication }}" target="_blank" style="color:var(--brand-500)">{{ situation.publication|truncatechars:40 }}</a>{% else %}—{% endif %}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="3" style="text-align:center;color:var(--muted);padding:28px">Aucune déclaration.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

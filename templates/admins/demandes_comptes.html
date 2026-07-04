@@ -1,0 +1,64 @@
+{% extends 'base_cfd.html' %}
+
+{% block title %}Doctoralis — Validation des comptes{% endblock %}
+{% block page_title %}Validation des comptes{% endblock %}
+{% block page_sub %}Acceptez ou refusez les demandes de comptes.{% endblock %}
+
+{% block content %}
+<div class="panel" style="margin-bottom:22px">
+  <div class="panel-head"><h3>Doctorants</h3><span class="meta">Comptes doctorants</span></div>
+  <div class="table-wrap" style="border:0">
+    <table class="data">
+      <thead><tr><th>N° d'inscription</th><th>Fichier</th><th>Année</th><th>État</th><th>Action</th></tr></thead>
+      <tbody>
+        {% for doctorant in doctorants %}
+        <tr>
+          <td><b>{{ doctorant.user }}</b></td>
+          <td>{% if doctorant.fichier_inscription %}<a href="{{ doctorant.fichier_inscription.url }}" target="_blank" style="color:var(--brand-500)">Voir</a>{% else %}—{% endif %}</td>
+          <td>{{ doctorant.annee }}</td>
+          <td>{% if doctorant.validation %}<span class="badge badge-good">Validé</span>{% else %}<span class="badge badge-warn">En attente</span>{% endif %}</td>
+          <td>
+            <form method="post" action="{% url 'demandesComptes' %}" style="display:flex;gap:8px">
+              {% csrf_token %}
+              <input type="hidden" name="doctorant_id" value="{{ doctorant.id }}">
+              <button class="btn btn-primary" style="padding:.45em 1em;font-size:.82rem" type="submit" name="action" value="accept">Accepter</button>
+              <button class="btn btn-ghost" style="padding:.45em 1em;font-size:.82rem" type="submit" name="action" value="reject">Refuser</button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:28px">Aucune demande.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-head"><h3>Encadreurs</h3><span class="meta">Comptes encadreurs</span></div>
+  <div class="table-wrap" style="border:0">
+    <table class="data">
+      <thead><tr><th>N° carte professionnelle</th><th>Nom et prénom</th><th>État</th><th>Action</th></tr></thead>
+      <tbody>
+        {% for encadreur in encadreurs %}
+        <tr>
+          <td><b>{{ encadreur.user }}</b></td>
+          <td>{{ encadreur.nom_prenom }}</td>
+          <td>{% if encadreur.validation %}<span class="badge badge-good">Validé</span>{% else %}<span class="badge badge-warn">En attente</span>{% endif %}</td>
+          <td>
+            <form method="post" action="{% url 'demandesComptes' %}" style="display:flex;gap:8px">
+              {% csrf_token %}
+              <input type="hidden" name="encadreur_id" value="{{ encadreur.id }}">
+              <button class="btn btn-primary" style="padding:.45em 1em;font-size:.82rem" type="submit" name="action_encadreur" value="accept">Accepter</button>
+              <button class="btn btn-ghost" style="padding:.45em 1em;font-size:.82rem" type="submit" name="action_encadreur" value="reject">Refuser</button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" style="text-align:center;color:var(--muted);padding:28px">Aucune demande.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

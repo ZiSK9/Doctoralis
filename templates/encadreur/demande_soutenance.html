@@ -1,0 +1,34 @@
+{% extends 'base_encadreur.html' %}
+
+{% block title %}Doctoralis — Demande de soutenance{% endblock %}
+{% block page_title %}Demander une soutenance{% endblock %}
+{% block page_sub %}Initiez une demande de soutenance pour l'un de vos doctorants.{% endblock %}
+
+{% block content %}
+<div class="panel" style="max-width:560px">
+  <div class="panel-head"><h3>Nouvelle demande</h3></div>
+  <form action="{% url 'demandeSoutenance' %}" method="POST">
+    {% csrf_token %}
+    <div class="field">
+      <label for="doctorant">Doctorant</label>
+      <select id="doctorant" name="doctorant" required>
+        <option value="" selected disabled>Sélectionnez un doctorant</option>
+        {% for doctorant in doctorants %}
+          {% if doctorant.inscription.all %}
+            {% for inscription in doctorant.inscription.all %}
+              <option value="{{ doctorant.id }}">{{ inscription.prenom }} {{ inscription.nom }}</option>
+            {% endfor %}
+          {% elif doctorant.reinscription.all %}
+            {% for reinscription in doctorant.reinscription.all %}
+              <option value="{{ doctorant.id }}">{{ reinscription.prenom }} {{ reinscription.nom }}</option>
+            {% endfor %}
+          {% else %}
+            <option value="{{ doctorant.id }}">{{ doctorant.user.username }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+    <button class="btn btn-primary" type="submit" style="margin-top:8px">Envoyer la demande</button>
+  </form>
+</div>
+{% endblock %}

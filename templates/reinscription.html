@@ -1,0 +1,47 @@
+{% extends 'base_doctorant.html' %}
+
+{% block title %}Doctoralis — Réinscription{% endblock %}
+{% block page_title %}Réinscription{% endblock %}
+{% block page_sub %}Renouvelez votre inscription pour l'année en cours.{% endblock %}
+
+{% block content %}
+<div class="panel" style="max-width:900px">
+  <div class="panel-head"><h3>Formulaire de réinscription</h3><span class="meta">Suivi annuel</span></div>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="field"><label>N° d'inscription</label><input name="numero_inscription" type="text" required></div>
+      <div class="field"><label>Année de thèse</label>
+        <select name="select_annee" required>
+          <option value="" selected disabled>-- année --</option>
+          <option value="1">1re année</option>
+          <option value="2">2e année</option>
+          <option value="3">3e année</option>
+        </select>
+      </div>
+      <div class="field"><label>Nom</label><input name="Nom" type="text" required></div>
+      <div class="field"><label>Prénom</label><input name="prenom" type="text" required></div>
+      <div class="field" style="grid-column:1/-1"><label>Titre du sujet</label><input name="titre_sujet" type="text" required></div>
+      <div class="field"><label>Date de 1re inscription</label>
+        <select name="date_1ere_inscription" required>
+          <option value="" selected disabled>-- année --</option>
+          <option value="2019/2020">2019/2020</option>
+          <option value="2020/2021">2020/2021</option>
+          <option value="2021/2022">2021/2022</option>
+          <option value="2022/2023">2022/2023</option>
+          <option value="2023/2024">2023/2024</option>
+          <option value="2024/2025">2024/2025</option>
+          <option value="2025/2026">2025/2026</option>
+          <option value="2026/2027">2026/2027</option>
+        </select>
+      </div>
+      <div class="field"><label>Nom de l'encadreur</label><input name="nom_encadreur" type="text" required></div>
+      <div class="field"><label>Nom du co-encadreur</label><input name="nom_co_encadreur" type="text"></div>
+      <div class="field"><label>Mail public (yahoo, gmail)</label><input type="email" name="mail_public" required></div>
+      <div class="field"><label>Mail institutionnel (univ-oran1.dz)</label><input type="email" name="mail_institutionnel" required></div>
+      <div class="field" style="grid-column:1/-1"><label>Fichier de réinscription (PDF)</label><input type="file" name="fichier_inscription" required></div>
+    </div>
+    <button class="btn btn-primary" type="submit" style="margin-top:8px">Enregistrer ma réinscription</button>
+  </form>
+</div>
+{% endblock %}

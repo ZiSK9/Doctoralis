@@ -1,0 +1,35 @@
+{% extends 'base_auth.html' %}
+
+{% block title %}Doctoralis — Espace Doctorant{% endblock %}
+{% block aside_badge %}Espace Doctorant{% endblock %}
+{% block aside_title %}Votre thèse,<br>toujours à portée de main.{% endblock %}
+{% block aside_text %}Suivez votre dossier, gérez vos inscriptions et consultez vos évaluations, où que vous soyez.{% endblock %}
+{% block aside_points %}
+  <li>✓&nbsp;&nbsp;Suivi de l'avancement en temps réel</li>
+  <li>✓&nbsp;&nbsp;Dépôt de documents dématérialisé</li>
+  <li>✓&nbsp;&nbsp;Consultation de vos points (PV)</li>
+{% endblock %}
+
+{% block form_title %}Se connecter{% endblock %}
+{% block form_lede %}Accédez à votre espace doctorant.{% endblock %}
+{% block demo_url %}{% url 'point' %}{% endblock %}
+
+{% block form %}
+<form action="{% url 'indexDoctorant' %}" method="POST">
+  {% csrf_token %}
+  <div class="field">
+    <label for="numero_inscription">N° d'inscription</label>
+    <input id="numero_inscription" type="text" name="numero_inscription" placeholder="Ex : 2024-D-0142" required />
+  </div>
+  <div class="field">
+    <label for="password">Mot de passe</label>
+    <input id="password" type="password" name="password" placeholder="••••••••" required />
+  </div>
+  <button class="btn btn-primary btn-block" type="submit">
+    Se connecter
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </button>
+</form>
+{% endblock %}
+
+{% block form_footer %}Pas encore de compte ? <a href="{% url 'demandeCompte' %}" style="color:var(--brand-500);font-weight:600">Demander un accès</a>{% endblock %}

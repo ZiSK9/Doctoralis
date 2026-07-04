@@ -1,0 +1,89 @@
+{% extends 'base_cfd.html' %}
+
+{% block title %}Doctoralis — Édition de PV{% endblock %}
+{% block page_title %}Édition de PV{% endblock %}
+{% block page_sub %}Attribuez les points d'évaluation aux doctorants.{% endblock %}
+
+{% block content %}
+<div class="panel" style="margin-bottom:22px;max-width:760px">
+  <div class="panel-head"><h3>Saisir une évaluation</h3><span class="meta">Barème officiel</span></div>
+  <form action="{% url 'edition_PV_2' %}" method="POST">
+    {% csrf_token %}
+    <div class="field">
+      <label for="doctorant">Doctorant</label>
+      <select id="doctorant" name="doctorant" required>
+        <option value="" selected disabled>Sélectionnez un doctorant</option>
+        {% for doctorant in doctorants %}
+          {% if doctorant.inscription.all %}
+            {% for inscription in doctorant.inscription.all %}<option value="{{ doctorant.id }}">{{ inscription.prenom }} {{ inscription.nom }}</option>{% endfor %}
+          {% elif doctorant.reinscription.all %}
+            {% for reinscription in doctorant.reinscription.all %}<option value="{{ doctorant.id }}">{{ reinscription.prenom }} {{ reinscription.nom }}</option>{% endfor %}
+          {% else %}
+            <option value="{{ doctorant.id }}">{{ doctorant.user.username }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+      <div class="field"><label>Cours de spécialité <span style="color:var(--muted)">(/12)</span></label><input type="number" name="cours_de_specialite" placeholder="0"></div>
+      <div class="field"><label>Méthodologie <span style="color:var(--muted)">(/6)</span></label><input type="number" name="methodologie" placeholder="0"></div>
+      <div class="field"><label>Anglais <span style="color:var(--muted)">(/6)</span></label><input type="number" name="competences_anglais" placeholder="0"></div>
+    </div>
+
+    <label style="font-weight:600;font-size:.9rem;display:block;margin:8px 0 7px">Communications <span style="color:var(--muted);font-weight:400">(Nat=10, Int=12.5)</span></label>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="field"><select name="communications1"><option value="" selected disabled>Communication 1</option><option value="10">10 (Nationale)</option><option value="12.5">12.5 (Internationale)</option></select></div>
+      <div class="field"><select name="communications2"><option value="" selected disabled>Communication 2</option><option value="10">10 (Nationale)</option><option value="12.5">12.5 (Internationale)</option></select></div>
+    </div>
+
+    <label style="font-weight:600;font-size:.9rem;display:block;margin:8px 0 7px">Publications <span style="color:var(--muted);font-weight:400">(40 ou 50 pts)</span></label>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+      {% for i in "12345" %}
+      <div class="field"><select name="publication{{ forloop.counter }}"><option value="" selected disabled>Pub. {{ forloop.counter }}</option><option value="40">40</option><option value="50">50</option></select></div>
+      {% endfor %}
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="field"><label>TIC</label><input type="number" name="Tic" placeholder="0"></div>
+      <div class="field"><label>Brevet</label><input type="number" name="brevet" placeholder="0"></div>
+    </div>
+
+    <button class="btn btn-primary" type="submit" style="margin-top:8px">Appliquer l'évaluation</button>
+  </form>
+</div>
+
+<div class="table-wrap">
+  <table class="data">
+    <thead>
+      <tr>
+        <th>Doctorant</th><th>Cours</th><th>Méthodo.</th><th>Anglais</th>
+        <th>Communications</th><th>Publications</th><th>TIC</th><th>Brevet</th><th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for edition in editions %}
+      <tr>
+        <td>
+          <b>
+          {% for inscription in edition.doctorant.inscription.all %}{{ inscription.prenom }} {{ inscription.nom }}{% endfor %}
+          {% for reinscription in edition.doctorant.reinscription.all %}{{ reinscription.prenom }} {{ reinscription.nom }}{% endfor %}
+          </b>
+          <div style="color:var(--muted);font-size:.82rem">{{ edition.doctorant.user.username }}</div>
+        </td>
+        <td>{{ edition.cours_de_spécialité|default:"—" }}</td>
+        <td>{{ edition.methodologie|default:"—" }}</td>
+        <td>{{ edition.compétences_anglais|default:"—" }}</td>
+        <td>{{ edition.communications1|default:"0" }} / {{ edition.communications2|default:"0" }}</td>
+        <td>{{ edition.publication1|default:"0" }}, {{ edition.publication2|default:"0" }}, {{ edition.publication3|default:"0" }}, {{ edition.publication4|default:"0" }}, {{ edition.publication5|default:"0" }}</td>
+        <td>{{ edition.tic|default:"—" }}</td>
+        <td>{{ edition.brevet|default:"—" }}</td>
+        <td><span class="badge badge-brand" style="font-size:.92rem">{{ edition.total|default:"0" }}</span></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="9" style="text-align:center;color:var(--muted);padding:28px">Aucune évaluation.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Django
+staticfiles/
+*.log
+
+# Environnement local
+.env
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# NB : db.sqlite3 et media/ sont VOLONTAIREMENT versionnés
+# pour que la démo Render reparte toujours avec les données.

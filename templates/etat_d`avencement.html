@@ -1,0 +1,17 @@
+{% extends 'base_doctorant.html' %}
+
+{% block title %}Doctoralis — État d'avancement{% endblock %}
+{% block page_title %}État d'avancement{% endblock %}
+{% block page_sub %}Mettez à jour vos publications et communications.{% endblock %}
+
+{% block content %}
+<div class="panel" style="max-width:680px">
+  <div class="panel-head"><h3>Déclarer une production scientifique</h3></div>
+  <form method="POST" action="{% url 'etat_d`avencement' %}">
+    {% csrf_token %}
+    <div class="field"><label>Communication</label><input name="communication" type="text" placeholder="Insérer le lien ici"></div>
+    <div class="field"><label>Publication</label><input name="publication" type="text" placeholder="Insérer le lien ici"></div>
+    <button class="btn btn-primary" type="submit" style="margin-top:8px">Mettre à jour ma situation</button>
+  </form>
+</div>
+{% endblock %}

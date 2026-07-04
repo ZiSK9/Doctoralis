@@ -1,0 +1,23 @@
+{% extends 'base_cfd.html' %}
+
+{% block title %}Doctoralis — Contrôle campagne{% endblock %}
+{% block page_title %}Contrôle des campagnes{% endblock %}
+{% block page_sub %}Ouvrez ou fermez les inscriptions et réinscriptions.{% endblock %}
+
+{% block content %}
+<div class="panel" style="max-width:520px">
+  <div class="panel-head"><h3>Statut de la campagne</h3></div>
+  <form action="{% url 'controlReinscription' %}" method="POST">
+    {% csrf_token %}
+    <div class="field">
+      <label for="control">Action</label>
+      <select id="control" name="control" required>
+        <option value="" selected disabled>-- Choisir --</option>
+        <option value="open">Ouvrir les inscriptions</option>
+        <option value="close">Fermer les inscriptions</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" type="submit" style="margin-top:8px">Appliquer</button>
+  </form>
+</div>
+{% endblock %}

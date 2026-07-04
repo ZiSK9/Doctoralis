@@ -1,0 +1,32 @@
+{% extends 'base_doyen.html' %}
+
+{% block title %}Doctoralis — Inscriptions{% endblock %}
+{% block page_title %}Inscriptions{% endblock %}
+{% block page_sub %}Tous les dossiers d'inscription.{% endblock %}
+
+{% block content %}
+<div class="table-wrap">
+  <table class="data">
+    <thead>
+      <tr>
+        <th>N° inscription</th><th>Nom</th><th>Prénom</th><th>Titre du sujet</th><th>1re inscription</th>
+        <th>Encadreur</th><th>Co-encadreur</th><th>Mail public</th><th>Mail institutionnel</th><th>Fichier</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for inscription in inscriptions %}
+      <tr>
+        <td><b>{{ inscription.numero_inscription }}</b></td>
+        <td>{{ inscription.nom }}</td><td>{{ inscription.prenom }}</td>
+        <td>{{ inscription.titre_sujet }}</td><td>{{ inscription.date_premier_inscription }}</td>
+        <td>{{ inscription.nom_encadreur }}</td><td>{{ inscription.nom_co_encadreur }}</td>
+        <td>{{ inscription.mail_public }}</td><td>{{ inscription.mail_institutionnel }}</td>
+        <td>{% if inscription.fichier_inscription %}<a href="{{ inscription.fichier_inscription.url }}" target="_blank" style="color:var(--brand-500)">Voir</a>{% else %}—{% endif %}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="10" style="text-align:center;color:var(--muted);padding:28px">Aucune inscription.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base_doctorant.html' %}
+
+{% block title %}Doctoralis — Changement{% endblock %}
+{% block page_title %}Changement de sujet / encadreur{% endblock %}
+{% block page_sub %}À remplir uniquement en cas de modification.{% endblock %}
+
+{% block content %}
+<div class="panel" style="max-width:760px">
+  <div class="panel-head"><h3>Déclarer un changement</h3><span class="meta">Optionnel</span></div>
+  <div class="alert alert-info" style="margin-bottom:18px"><span>Ne remplissez cette page que si votre sujet, votre encadreur ou votre co-encadreur a changé. Joignez le PV du CSD.</span></div>
+  <form method="POST" id="reinscription-form" enctype="multipart/form-data" action="{% url 'changement' %}">
+    {% csrf_token %}
+    <div class="field"><label>Nouveau titre du sujet</label><input name="changement_sujet" type="text"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="field"><label>Nouvel encadreur</label><input name="nouveau_nom_encadreur" type="text"></div>
+      <div class="field"><label>Nouveau co-encadreur</label><input name="nouveau_nom_co_encadreur" type="text"></div>
+    </div>
+    <div class="field"><label>Fichier du CSD (PDF)</label><input type="file" name="fichier_CSD"></div>
+    <button class="btn btn-primary" type="submit" style="margin-top:8px">Enregistrer le changement</button>
+  </form>
+</div>
+{% endblock %}

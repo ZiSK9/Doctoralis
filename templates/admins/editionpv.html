@@ -1,0 +1,45 @@
+{% extends 'base_cfd.html' %}
+
+{% block title %}Doctoralis — Édition de PV (simple){% endblock %}
+{% block page_title %}Édition de PV — saisie rapide{% endblock %}
+{% block page_sub %}Saisie individuelle par numéro d'inscription.{% endblock %}
+
+{% block content %}
+<div class="panel" style="margin-bottom:22px;max-width:640px">
+  <div class="panel-head"><h3>Saisir une évaluation</h3></div>
+  <form method="POST" action="{% url 'editionPV' %}">
+    {% csrf_token %}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="field"><label>N° d'inscription</label><input type="text" name="numero_inscription" required></div>
+      <div class="field"><label>Nom et prénom</label><input type="text" name="nom_prenom"></div>
+      <div class="field"><label>Cours de spécialité (/12)</label><input type="number" name="cours_de_specialite" placeholder="0"></div>
+      <div class="field"><label>Méthodologie (/6)</label><input type="number" name="methodologie" placeholder="0"></div>
+      <div class="field"><label>Anglais (/6)</label><input type="number" name="competences_anglais" placeholder="0"></div>
+      <div class="field"><label>Communications 1</label><input type="number" name="communications" placeholder="0"></div>
+      <div class="field"><label>Communications 2</label><input type="number" name="communications2" placeholder="0"></div>
+      <div class="field"><label>Publications</label><input type="number" name="publications" placeholder="0"></div>
+      <div class="field"><label>TIC</label><input type="number" name="tic" placeholder="0"></div>
+    </div>
+    <button class="btn btn-primary" type="submit" style="margin-top:8px">Appliquer</button>
+  </form>
+</div>
+
+<div class="table-wrap">
+  <table class="data">
+    <thead><tr><th>Doctorant</th><th>Cours</th><th>Méthodo.</th><th>Anglais</th><th>Total</th></tr></thead>
+    <tbody>
+      {% for edition in entries %}
+      <tr>
+        <td><b>{{ edition.doctorant }}</b></td>
+        <td>{{ edition.cours_de_spécialité|default:"—" }}</td>
+        <td>{{ edition.methodologie|default:"—" }}</td>
+        <td>{{ edition.compétences_anglais|default:"—" }}</td>
+        <td><span class="badge badge-brand">{{ edition.total|default:"0" }}</span></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:28px">Aucune évaluation.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
