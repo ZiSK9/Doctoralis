@@ -169,6 +169,10 @@ os.path.join(BASE_DIR ,'static'),
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# Let WhiteNoise serve static files straight from the finders (STATICFILES_DIRS),
+# so the site is correctly styled even if `collectstatic` didn't run during build.
+WHITENOISE_USE_FINDERS = True
+
 # WhiteNoise: compress static files but WITHOUT a manifest, so a missing
 # reference never turns into a 500 on a demo.
 STORAGES = {
