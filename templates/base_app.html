@@ -38,17 +38,23 @@
         </div>
       </div>
 
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert {% if message.tags == 'error' %}alert-error{% elif message.tags == 'success' %}alert-success{% else %}alert-info{% endif %}" style="margin-bottom:18px">
-            <span>{{ message }}</span>
-          </div>
-        {% endfor %}
-      {% endif %}
-
       {% block content %}{% endblock %}
     </main>
   </div>
+
+  {% if messages %}
+  <div class="toast-stack" id="toastStack">
+    {% for message in messages %}
+      {% if message.tags == 'error' %}
+      <div class="toast t-error"><svg class="t-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><span>{{ message }}</span><button class="t-close" onclick="this.parentNode.remove()">×</button></div>
+      {% elif message.tags == 'success' %}
+      <div class="toast t-success"><svg class="t-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span>{{ message }}</span><button class="t-close" onclick="this.parentNode.remove()">×</button></div>
+      {% else %}
+      <div class="toast t-info"><svg class="t-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>{{ message }}</span><button class="t-close" onclick="this.parentNode.remove()">×</button></div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% endif %}
 
   <script>
     var root = document.documentElement, tbtn = document.getElementById('themeToggle');
@@ -67,7 +73,30 @@
     var mb = document.getElementById('menuBtn');
     if (window.innerWidth <= 980) { mb.style.display = 'grid'; }
     mb && mb.addEventListener('click', function () { document.getElementById('sidebar').classList.toggle('open'); });
+
+    // Auto-dismiss toasts
+    Array.prototype.forEach.call(document.querySelectorAll('.toast'), function (t, i) {
+      setTimeout(function () { t.classList.add('out'); setTimeout(function () { t.remove(); }, 300); }, 4500 + i * 400);
+    });
+
+    // Animated KPI counters
+    function animateNum(el) {
+      var raw = el.textContent.trim(), m = raw.match(/-?[\d.,]+/);
+      if (!m) return;
+      var target = parseFloat(m[0].replace(',', '.')); if (isNaN(target)) return;
+      var decimals = (m[0].split(/[.,]/)[1] || '').length;
+      var prefix = raw.slice(0, m.index), suffix = raw.slice(m.index + m[0].length), t0 = null;
+      function step(ts) {
+        if (!t0) t0 = ts; var p = Math.min((ts - t0) / 1100, 1);
+        var val = (0.5 - Math.cos(p * Math.PI) / 2) * target;
+        el.textContent = prefix + val.toLocaleString('fr-FR', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + suffix;
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('.kpi .k-val'), animateNum);
   </script>
+  <script src="{% static 'js/datatable.js' %}"></script>
   {% block extra_js %}{% endblock %}
 </body>
 
